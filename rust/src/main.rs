@@ -1,13 +1,12 @@
-
 #![allow(unused)]
 use bitcoin::hex::DisplayHex;
+use bitcoin::Network;
 use bitcoincore_rpc::bitcoin::Amount;
 use bitcoincore_rpc::{Auth, Client, RpcApi};
 use serde::Deserialize;
 use serde_json::json;
 use std::fs::File;
 use std::io::Write;
-use bitcoin::Network;
 
 // Node access params
 const RPC_URL: &str = "http://127.0.0.1:18443"; // Default regtest RPC port
@@ -114,7 +113,10 @@ fn main() -> bitcoincore_rpc::Result<()> {
     let miner_input_address = input_detail.script_pub_key.address.as_ref().unwrap();
     let miner_input_amount = input_detail.value;
     // Miner's Input Address
-    output.push_str(&format!("{}\n", miner_input_address.clone().assume_checked()));
+    output.push_str(&format!(
+        "{}\n",
+        miner_input_address.clone().assume_checked()
+    ));
     // Miner's Input Amount
     output.push_str(&format!("{}\n", miner_input_amount.to_btc()));
 
@@ -125,7 +127,16 @@ fn main() -> bitcoincore_rpc::Result<()> {
         .find(|o| o.script_pub_key.address.as_ref() == Some(&trader_address_unchecked))
         .unwrap();
     // Trader's Output Address
-    output.push_str(&format!("{}\n", trader_output.script_pub_key.address.as_ref().unwrap().clone().assume_checked()));
+    output.push_str(&format!(
+        "{}\n",
+        trader_output
+            .script_pub_key
+            .address
+            .as_ref()
+            .unwrap()
+            .clone()
+            .assume_checked()
+    ));
     // Trader's Output Amount
     output.push_str(&format!("{}\n", trader_output.value.to_btc()));
 
@@ -136,7 +147,16 @@ fn main() -> bitcoincore_rpc::Result<()> {
         .find(|o| o.script_pub_key.address.as_ref() != Some(&trader_address_unchecked))
         .unwrap();
     // Miner's Change Address
-    output.push_str(&format!("{}\n", miner_change_output.script_pub_key.address.as_ref().unwrap().clone().assume_checked()));
+    output.push_str(&format!(
+        "{}\n",
+        miner_change_output
+            .script_pub_key
+            .address
+            .as_ref()
+            .unwrap()
+            .clone()
+            .assume_checked()
+    ));
     // Miner's Change Amount
     output.push_str(&format!("{}\n", miner_change_output.value.to_btc()));
 
