@@ -93,7 +93,7 @@ fn main() -> bitcoincore_rpc::Result<()> {
 
     // Fetch the unconfirmed transaction from the node's mempool and print it.
     let mempool_entry = rpc.get_mempool_entry(&txid)?;
-    println!("Mempool entry: {:?}", mempool_entry);
+    println!("Mempool entry: {mempool_entry:?}");
 
     // Confirm the transaction by mining 1 block.
     let block_hash = miner_rpc.generate_to_address(1, &miner_address)?[0];
