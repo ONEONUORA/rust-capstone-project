@@ -44,14 +44,14 @@ fn main() -> bitcoincore_rpc::Result<()> {
 
     // Get blockchain info
     let blockchain_info = rpc.get_blockchain_info()?;
-    println!("Blockchain Info: {:?}", blockchain_info);
+    println!("Blockchain Info: {blockchain_info:?}");
 
     // Create/Load the wallets, named 'Miner' and 'Trader'.
     if !rpc.list_wallets()?.contains(&"Miner".to_string()) {
         rpc.create_wallet("Miner", None, None, None, None)?;
     }
     let miner_rpc = Client::new(
-        &format!("{}/wallet/Miner", RPC_URL),
+        &format!("{RPC_URL}/wallet/Miner"),
         Auth::UserPass(RPC_USER.to_owned(), RPC_PASS.to_owned()),
     )?;
 
@@ -59,7 +59,7 @@ fn main() -> bitcoincore_rpc::Result<()> {
         rpc.create_wallet("Trader", None, None, None, None)?;
     }
     let trader_rpc = Client::new(
-        &format!("{}/wallet/Trader", RPC_URL),
+        &format!("{RPC_URL}/wallet/Trader"),
         Auth::UserPass(RPC_USER.to_owned(), RPC_PASS.to_owned()),
     )?;
 
@@ -73,7 +73,7 @@ fn main() -> bitcoincore_rpc::Result<()> {
     // Therefore, we need to mine 101 blocks in total: 1 block for the initial reward and 100 blocks for it to mature.
     miner_rpc.generate_to_address(101, &miner_address)?;
     let miner_balance = miner_rpc.get_balance(None, None)?;
-    println!("Miner balance: {}", miner_balance);
+    println!("Miner balance: {miner_balance}");
 
     // Create a receiving address from the Trader wallet with the label "Received".
     let trader_address_unchecked = trader_rpc.get_new_address(Some("Received"), None)?;
